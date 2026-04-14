@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SintéticaBolaños - Mi Portal</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar para Usuario -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class='bx bxs-pie-chart-alt-2'></i>
+                    <span>SintéticaBolaños</span>
+                </div>
+            </div>
+            
+            <div style="padding: 1rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--text-white);">
+                <div style="font-size: 0.8rem; opacity: 0.7;">Portal del Jugador</div>
+                <div id="sidebar-user-name" style="font-weight: 600; margin-top: 0.2rem;">Bienvenido</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active" data-target="inicio">
+                        <i class='bx bx-home-alt'></i>
+                        <span>Inicio</span>
+                    </li>
+                    <li class="nav-item" data-target="mis-reservas">
+                        <i class='bx bx-calendar-check'></i>
+                        <span>Mis Reservas</span>
+                    </li>
+                    <li class="nav-item" data-target="soporte">
+                        <i class='bx bx-support'></i>
+                        <span>Soporte</span>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="nav-item logout">
+                    <i class='bx bx-log-out'></i>
+                    <span>Cerrar Sesión</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            
+            <!-- Header dinámico -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <h1 id="page-title">Mi Resumen</h1>
+                    <p id="page-subtitle">Bienvenido a tu portal personal</p>
+                </div>
+                
+                <div class="topbar-right">
+                    <div class="date-widget" id="header-date-widget">
+                        <i class='bx bx-calendar'></i>
+                        <span id="current-date">Lunes, 9 de Marzo 2026</span>
+                    </div>
+                    <div class="header-actions" id="header-actions-container">
+                        <button class="btn btn-primary" id="btn-action" style="display: none;">
+                            <i class='bx bx-calendar-plus'></i> Nueva Acción
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Vistas / Vistas SPA -->
+            <div class="views-container">
+                
+                <!-- Vista: Inicio -->
+                <section id="view-inicio" class="view active">
+                    
+                    <h2 class="mb-4 text-dark">Hola, <span id="greeting-name">Jugador</span> 👋</h2>
+
+                    <div class="grid-2charts">
+                        <!-- Próxima Reserva -->
+                        <div class="card">
+                            <h3 class="card-title mb-4"><i class='bx bx-time text-primary mr-2'></i> Tu Próxima Reserva</h3>
+                            
+                            <div style="background-color: #f0fdf4; border: 1px solid #10b981; border-radius: var(--radius-md); padding: 1.5rem;">
+                                <div class="flex-between mb-2">
+                                    <span class="badge badge-status bg-green">Confirmada</span>
+                                    <span style="font-weight: 600; color: #065f46;">Mañana, 18:00h</span>
+                                </div>
+                                <h4 style="font-size: 1.2rem; color: #064e3b; margin-bottom: 0.5rem;">Fútbol 5 - Cancha Central</h4>
+                                <p style="color: #047857; font-size: 0.9rem;"><i class='bx bx-map'></i> Sede Principal Norte</p>
+                            </div>
+                        </div>
+
+                        <!-- Estado de Soporte -->
+                        <div class="card">
+                            <h3 class="card-title mb-4"><i class='bx bx-receipt text-warning mr-2'></i> Notificaciones</h3>
+                            <div class="ticket-item" style="border: 1px solid var(--border-color); padding: 1rem; border-radius: var(--radius-md);">
+                                <div class="flex-between mb-2">
+                                    <span class="badge badge-secondary">TKT-1020</span>
+                                    <span class="badge badge-outline">Resuelto</span>
+                                </div>
+                                <p class="text-dark" style="font-weight: 500;">Problema con malla reportado</p>
+                                <p class="text-muted" style="font-size: 0.8rem; margin-top: 0.5rem;">Tu reporte ha sido solucionado. ¡Gracias por avisarnos!</p>
+                            </div>
+                        </div>
+                    </div>
+                </section> 
+
+                <!-- Vista: Mis Reservas -->
+                <section id="view-mis-reservas" class="view">
+                    
+                    <div class="card full-width-card">
+                        <div class="card-header pb-2">
+                            <h3 class="card-title">Historial de Reservas</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Cancha</th>
+                                        <th>Horario</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-reservas-user">
+                                    <tr>
+                                        <td>Mañana, 10 mar</td>
+                                        <td><span class="fw-bold">Cancha Central</span></td>
+                                        <td>18:00 - 19:00</td>
+                                        <td><span class="badge-status bg-green">Confirmada</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dom, 8 mar</td>
+                                        <td><span class="fw-bold">Cancha 2 Auxiliar</span></td>
+                                        <td>11:00 - 12:00</td>
+                                        <td><span class="badge-status bg-gray">Completada</span></td>
+                                    </tr>
+                                    <tr>
+                                    <tr>
+                                        <td>Sáb, 28 feb</td>
+                                        <td><span class="fw-bold">Cancha Central</span></td>
+                                        <td>20:00 - 22:00</td>
+                                        <td><span class="badge-status bg-gray">Completada</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jue, 15 feb</td>
+                                        <td><span class="fw-bold">Cancha 3 SintéticaBolaños</span></td>
+                                        <td>18:00 - 19:00</td>
+                                        <td><span class="badge-status bg-gray">Completada</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mar, 03 feb</td>
+                                        <td><span class="fw-bold">Cancha Central</span></td>
+                                        <td>20:00 - 21:00</td>
+                                        <td><span class="badge-status bg-gray">Completada</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section> 
+
+                <!-- Vista: Soporte -->
+                <section id="view-soporte" class="view">
+                    
+                    <div class="card full-width-card">
+                        <div class="card-header flex-between pb-2">
+                            <h3 class="card-title">Mis Reportes de Mantenimiento</h3>
+                        </div>
+
+                        <div class="ticket-list mt-4">
+                            <div class="ticket-item">
+                                <div class="ticket-info-top">
+                                    <span class="ticket-id">TKT-1020</span>
+                                    <span class="badge badge-dark">Sugerencia</span>
+                                    <span class="badge badge-outline" style="border-color: #10b981; color: #10b981;">Resuelto</span>
+                                </div>
+                                <h4 class="ticket-title">Agujero en la red de la Cancha 2</h4>
+                                <p class="ticket-meta">Reportado el 1 de Marzo, 2026</p>
+                            </div>
+
+                            <div class="ticket-item">
+                                <div class="ticket-info-top">
+                                    <span class="ticket-id">TKT-1055</span>
+                                    <span class="badge badge-danger">Crítica</span>
+                                    <span class="badge badge-outline">En Revisión</span>
+                                </div>
+                                <h4 class="ticket-title">Un reflector se quemó</h4>
+                                <p class="ticket-meta">Reportado hace 2 días</p>
+                            </div>
+                        </div>
+                    </div>
+                </section> 
+
+            </div> <!-- Fin Views -->
+
+        </main>
+
+        <!-- MODAL DE RESERVA -->
+        <div class="modal-overlay" id="modal-reserva">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <h3 class="modal-title">Nueva Reserva</h3>
+                    <button class="modal-close" id="close-modal">&times;</button>
+                </div>
+                <form id="form-reserva">
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Seleccionar Cancha / Deporte</label>
+                        <select id="select-cancha" style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit; font-size:1rem;">
+                            <option value="60000">Cancha 1 (Fútbol 5)</option>
+                            <option value="80000">Cancha 2 (Fútbol 7)</option>
+                            <option value="75000">Cancha 3 Cubierta (Fútbol 5)</option>
+                            <option value="120000">Cancha 4 VIP (Fútbol 5)</option>
+                            <option value="150000">Cancha 5 (Fútbol 11)</option>
+                            <option value="45000">Cancha de Tenis (Polvo de Ladrillo)</option>
+                            <option value="40000">Cancha de Tenis (Sintética)</option>
+                            <option value="35000">Cancha de Baloncesto</option>
+                            <option value="30000">Cancha de Voleibol</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 1rem; display:flex; gap:1rem;">
+                        <div style="flex:1;">
+                            <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Fecha</label>
+                            <input id="input-fecha" type="date" style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit;">
+                        </div>
+                        <div style="flex:1;">
+                            <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Horario</label>
+                            <select id="select-horario" style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit;">
+                                <option>18:00 - 19:00</option>
+                                <option>19:00 - 20:00</option>
+                                <option>20:00 - 21:00</option>
+                                <option>21:00 - 22:00</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-size: 1.1rem; font-weight: 600;">Precio a Pagar:</span>
+                            <span id="precio-reserva" style="font-size: 1.25rem; font-weight: 700; color: var(--success);">$60.000 COP</span>
+                        </div>
+                        <div style="background-color: #fff3ce; border-left: 4px solid #ffc107; padding: 0.75rem; border-radius: 4px; margin-top: 1rem;">
+                            <p style="margin: 0; font-size: 0.85rem; color: #856404; display: flex; align-items: flex-start; gap: 0.5rem;">
+                                <i class='bx bx-error-triangle' style="font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem;"></i>
+                                <span><strong>Aviso:</strong> Tú eres responsable de los objetos u materiales que se prestan, cuida el estado general de la cancha que te asignaron.</span>
+                            </p>
+                        </div>
+                    </div>
+                    <button id="btn-submit-reserva" type="button" class="btn btn-primary" style="width:100%; padding:0.8rem; margin-top:1rem;">
+                        Confirmar Reserva
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/user_app.js"></script>
+</body>
+</html>

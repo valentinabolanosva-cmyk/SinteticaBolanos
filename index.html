@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SintéticaBolaños - Dashboard</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class='bx bxs-pie-chart-alt-2'></i>
+                    <span>SintéticaBolaños</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active" data-target="dashboard">
+                        <i class='bx bx-grid-alt'></i>
+                        <span>Dashboard</span>
+                    </li>
+                    <li class="nav-item" data-target="inventario">
+                        <i class='bx bx-box'></i>
+                        <span>Inventario</span>
+                    </li>
+                    <li class="nav-item" data-target="reservas">
+                        <i class='bx bx-calendar-event'></i>
+                        <span>Reservas</span>
+                    </li>
+                    <li class="nav-item" data-target="reportes">
+                        <i class='bx bx-bar-chart-alt-2'></i>
+                        <span>Reportes</span>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="nav-item logout">
+                    <i class='bx bx-log-out'></i>
+                    <span>Cerrar Sesión</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            
+            <!-- Header dinámico -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <h1 id="page-title">Dashboard</h1>
+                    <p id="page-subtitle">Vista general del sistema de gestión</p>
+                </div>
+                
+                <div class="topbar-right">
+                    <div class="date-widget" id="header-date-widget">
+                        <i class='bx bx-calendar'></i>
+                        <span id="current-date">Lunes, 9 de Marzo 2026</span>
+                    </div>
+                    <div class="header-actions" id="header-actions-container">
+                        <button class="btn btn-primary" style="display: none;" id="btn-share">
+                            <i class='bx bx-share-alt'></i> Compartir
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Vistas / Vistas SPA -->
+            <div class="views-container">
+                
+                <!-- Vista: Dashboard -->
+                <section id="view-dashboard" class="view active">
+                    <!-- Fila de Tarjetas KPI -->
+                    <div class="grid-4kpi">
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span>Total Activos</span>
+                                <i class='bx bx-check-shield text-success'></i>
+                            </div>
+                            <h2 class="kpi-value">10</h2>
+                            <p class="kpi-desc">3 en estado excelente</p>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span>Tickets Activos</span>
+                                <i class='bx bx-receipt text-primary'></i>
+                            </div>
+                            <h2 class="kpi-value">5</h2>
+                            <p class="kpi-desc">1 de prioridad crítica</p>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span>Activos Críticos</span>
+                                <i class='bx bx-error text-danger'></i>
+                            </div>
+                            <h2 class="kpi-value">0</h2>
+                            <p class="kpi-desc">Requieren atención inmediata</p>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span>Tickets Resueltos</span>
+                                <i class='bx bx-check-circle text-success'></i>
+                            </div>
+                            <h2 class="kpi-value">2</h2>
+                            <p class="kpi-desc">De 8 tickets totales</p>
+                        </div>
+                    </div>
+
+                    <!-- Fila de Gráficos -->
+                    <div class="grid-2charts mt-4">
+                        <div class="chart-card">
+                            <h3 class="card-title">Tickets por Estado</h3>
+                            <div class="chart-container">
+                                <canvas id="chart-tickets-estado"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <h3 class="card-title">Tendencia de Tickets (Últimos 7 meses)</h3>
+                            <div class="chart-container">
+                                <canvas id="chart-tendencia"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Tickets Recientes -->
+                    <div class="card full-width-card mt-4">
+                        <div class="card-header flex-between">
+                            <h3 class="card-title">Tickets de Mantenimiento Recientes</h3>
+                            <a href="#" class="link-action" onclick="alert('Abriendo lista completa de tickets...')">Ver todos</a>
+                        </div>
+                        <div class="ticket-list">
+                            
+                            <!-- Ticket Item -->
+                            <div class="ticket-item">
+                                <div class="ticket-info-top">
+                                    <span class="ticket-id">TKT-2026-001</span>
+                                    <span class="badge badge-danger">Crítica</span>
+                                    <span class="badge badge-outline">En Progreso</span>
+                                </div>
+                                <h4 class="ticket-title">Reparación urgente césped sintético dañado</h4>
+                                <p class="ticket-meta">Cancha 1 • Asignado a: <span class="assigned">Juan Pérez - Técnico</span></p>
+                            </div>
+
+                            <!-- Ticket Item -->
+                            <div class="ticket-item">
+                                <div class="ticket-info-top">
+                                    <span class="ticket-id">TKT-2026-002</span>
+                                    <span class="badge badge-secondary">Media</span>
+                                    <span class="badge badge-outline">Abierto</span>
+                                </div>
+                                <h4 class="ticket-title">Mantenimiento preventivo sistema de iluminación</h4>
+                                <p class="ticket-meta">Cancha 1 • Asignado a: <span class="assigned">Pedro Gómez - Electricista</span></p>
+                            </div>
+
+                            <!-- Ticket Item -->
+                            <div class="ticket-item">
+                                <div class="ticket-info-top">
+                                    <span class="ticket-id">TKT-2026-003</span>
+                                    <span class="badge badge-dark">Alta</span>
+                                    <span class="badge badge-outline">Resuelto</span>
+                                </div>
+                                <h4 class="ticket-title">Inspección de porterías</h4>
+                                <p class="ticket-meta">Cancha 1 • Asignado a: <span class="assigned">Juan Pérez - Técnico</span></p>
+                            </div>
+                            
+                            <!-- Ticket Item -->
+                            <div class="ticket-item">
+                                <div class="ticket-info-top">
+                                    <span class="ticket-id">TKT-2026-004</span>
+                                    <span class="badge badge-dark">Alta</span>
+                                    <span class="badge badge-outline">Pendiente</span>
+                                </div>
+                                <h4 class="ticket-title">Sistema de riego no funciona correctamente</h4>
+                                <p class="ticket-meta">Cancha 2 • Asignado a: <span class="assigned">Luis Ramírez - Técnico</span></p>
+                            </div>
+
+                            <!-- Ticket Item -->
+                            <div class="ticket-item">
+                                <div class="ticket-info-top">
+                                    <span class="ticket-id">TKT-2026-005</span>
+                                    <span class="badge badge-secondary">Baja</span>
+                                    <span class="badge badge-outline">Abierto</span>
+                                </div>
+                                <h4 class="ticket-title">Instalación de nuevos banquillos</h4>
+                                <p class="ticket-meta">Cancha 1 • Asignado a: <span class="assigned">Carlos López - Instalador</span></p>
+                            </div>
+
+                        </div>
+                    </div>
+                </section> <!-- Fin Dashboard -->
+
+                <!-- Vista: Inventario -->
+                <section id="view-inventario" class="view">
+                    
+                    <div class="inventory-toolbar flex-between mb-4">
+                        <div class="search-filters">
+                            <div class="search-box">
+                                <i class='bx bx-search'></i>
+                                <input type="text" placeholder="Buscar por nombre o código...">
+                            </div>
+                            
+                            <div class="filter-box">
+                                <i class='bx bx-filter-alt'></i>
+                                <select>
+                                    <option>Todas las categorías</option>
+                                </select>
+                            </div>
+                            
+                            <div class="filter-box">
+                                <i class='bx bx-filter'></i>
+                                <select>
+                                    <option>Todos los estados</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card full-width-card pb-0">
+                        <div class="card-header pb-2">
+                            <h3 class="card-title"><i class='bx bx-cube-alt mr-2'></i> Activos Registrados (10)</h3>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Nombre</th>
+                                        <th>Categoría</th>
+                                        <th>Estado</th>
+                                        <th>Cancha</th>
+                                        <th>Último Mantenimiento</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-bold text-dark">CSP-001</td>
+                                        <td>
+                                            <div class="item-name">Césped Sintético Principal</div>
+                                            <div class="item-desc">Césped sintético de fibra larga, ideal para fútbol...</div>
+                                        </td>
+                                        <td>Infraestructura</td>
+                                        <td><span class="badge-status success">Bueno</span></td>
+                                        <td>Cancha 1</td>
+                                        <td>31/1/2026</td>
+                                        <td>$45.000.000</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold text-dark">POR-001</td>
+                                        <td>
+                                            <div class="item-name">Portería Profesional Norte</div>
+                                            <div class="item-desc">Portería de aluminio reforzado, cumple estándares ...</div>
+                                        </td>
+                                        <td>Equipamiento</td>
+                                        <td><span class="badge-status dark">Excelente</span></td>
+                                        <td>Cancha 1</td>
+                                        <td>14/1/2026</td>
+                                        <td>$3.500.000</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold text-dark">ILU-001</td>
+                                        <td>
+                                            <div class="item-name">Torre de Iluminación LED Este</div>
+                                            <div class="item-desc">Torre con 6 reflectores LED de 500W cada uno, altu...</div>
+                                        </td>
+                                        <td>Iluminación</td>
+                                        <td><span class="badge-status success">Bueno</span></td>
+                                        <td>Cancha 1</td>
+                                        <td>19/2/2026</td>
+                                        <td>$18.000.000</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold text-dark">CSP-002</td>
+                                        <td>
+                                            <div class="item-name">Césped Sintético Cancha 2</div>
+                                            <div class="item-desc">Césped sintético fibra media, requiere renovación ...</div>
+                                        </td>
+                                        <td>Infraestructura</td>
+                                        <td><span class="badge-status secondary">Regular</span></td>
+                                        <td>Cancha 2</td>
+                                        <td>9/12/2025</td>
+                                        <td>$35.000.000</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold text-dark">BAL-005</td>
+                                        <td>
+                                            <div class="item-name">Paquete de Balones Pro</div>
+                                            <div class="item-desc">Set de 10 balones oficiales marca Golty</div>
+                                        </td>
+                                        <td>Equipamiento</td>
+                                        <td><span class="badge-status dark">Excelente</span></td>
+                                        <td>Múltiple</td>
+                                        <td>02/3/2026</td>
+                                        <td>$1.500.000</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold text-dark">MOL-012</td>
+                                        <td>
+                                            <div class="item-name">Malla Perimetral Sur</div>
+                                            <div class="item-desc">Malla de contención en nylon de alta tenacidad</div>
+                                        </td>
+                                        <td>Infraestructura</td>
+                                        <td><span class="badge-status secondary">Regular</span></td>
+                                        <td>Cancha 1</td>
+                                        <td>15/8/2025</td>
+                                        <td>$8.200.000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section> <!-- Fin Inventario -->
+
+                <!-- Vista: Reservas -->
+                <section id="view-reservas" class="view">
+                    
+                    <div class="tabs-container">
+                        <button class="tab-btn active"><i class='bx bx-calendar-event'></i> Reservas</button>
+                        <button class="tab-btn"><i class='bx bx-time-five'></i> Tickets de Mantenimiento <span class="badge-tab">5</span></button>
+                    </div>
+
+                    <div class="grid-4kpi mb-4">
+                        <div class="kpi-card border-left-blue">
+                            <div class="kpi-header">
+                                <span>Reservas Hoy</span>
+                                <i class='bx bx-calendar text-primary'></i>
+                            </div>
+                            <h2 class="kpi-value text-primary">2</h2>
+                        </div>
+                        <div class="kpi-card border-left-green">
+                            <div class="kpi-header">
+                                <span>Confirmadas</span>
+                                <i class='bx bx-time-five text-success'></i>
+                            </div>
+                            <h2 class="kpi-value text-success">6</h2>
+                        </div>
+                        <div class="kpi-card border-left-orange">
+                            <div class="kpi-header">
+                                <span>Pendientes</span>
+                                <i class='bx bx-group text-warning'></i>
+                            </div>
+                            <h2 class="kpi-value text-warning">1</h2>
+                        </div>
+                        <div class="kpi-card border-left-green-light">
+                            <div class="kpi-header">
+                                <span>Ingresos Marzo</span>
+                                <i class='bx bx-dollar text-success'></i>
+                            </div>
+                            <h2 class="kpi-value text-success">$1020K</h2>
+                        </div>
+                    </div>
+
+                    <div class="card full-width-card mb-4">
+                        <div class="card-header border-bottom">
+                            <h3 class="card-title"><i class='bx bx-calendar'></i> Vista de Calendario - Próximos 7 Días</h3>
+                        </div>
+                        
+                        <div class="calendar-view p-3">
+                            <div class="calendar-grid">
+                                <!-- Day -->
+                                <div class="cal-day">
+                                    <div class="cal-day-header">
+                                        <span class="day-name">dom</span>
+                                        <span class="day-num">8</span>
+                                        <span class="day-month">mar.</span>
+                                    </div>
+                                    <div class="cal-events">
+                                        <div class="event-pill">15:00 C2</div>
+                                        <div class="event-pill">10:00 C1</div>
+                                    </div>
+                                </div>
+                                <!-- Day -->
+                                <div class="cal-day">
+                                    <div class="cal-day-header">
+                                        <span class="day-name">lun</span>
+                                        <span class="day-num">9</span>
+                                        <span class="day-month">mar.</span>
+                                    </div>
+                                    <div class="cal-events">
+                                        <div class="event-pill">18:00 C1</div>
+                                        <div class="event-pill">14:00 C1</div>
+                                    </div>
+                                </div>
+                                <!-- Day -->
+                                <div class="cal-day active">
+                                    <div class="cal-day-header">
+                                        <span class="day-name">mar</span>
+                                        <span class="day-num">10</span>
+                                        <span class="day-month">mar.</span>
+                                    </div>
+                                    <div class="cal-events">
+                                        <div class="event-pill">20:00 C1</div>
+                                    </div>
+                                </div>
+                                <!-- Day -->
+                                <div class="cal-day">
+                                    <div class="cal-day-header">
+                                        <span class="day-name">mié</span>
+                                        <span class="day-num">11</span>
+                                        <span class="day-month">mar.</span>
+                                    </div>
+                                    <div class="cal-events">
+                                        <div class="event-pill">17:00 C2</div>
+                                    </div>
+                                </div>
+                                <!-- Day -->
+                                <div class="cal-day">
+                                    <div class="cal-day-header">
+                                        <span class="day-name">jue</span>
+                                        <span class="day-num">12</span>
+                                        <span class="day-month">mar.</span>
+                                    </div>
+                                    <div class="cal-events">
+                                        <div class="event-pill">16:00 C2</div>
+                                    </div>
+                                </div>
+                                <!-- Day -->
+                                <div class="cal-day">
+                                    <div class="cal-day-header">
+                                        <span class="day-name">vie</span>
+                                        <span class="day-num">13</span>
+                                        <span class="day-month">mar.</span>
+                                    </div>
+                                    <div class="cal-events">
+                                        <div class="event-pill">15:00 C1</div>
+                                    </div>
+                                </div>
+                                <!-- Day -->
+                                <div class="cal-day">
+                                    <div class="cal-day-header">
+                                        <span class="day-name">sáb</span>
+                                        <span class="day-num">14</span>
+                                        <span class="day-month">mar.</span>
+                                    </div>
+                                    <div class="cal-events">
+                                        <div class="event-pill">08:00 C2</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card full-width-card">
+                        <div class="card-header pb-2">
+                            <h3 class="card-title">Todas las Reservas (10)</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Cliente</th>
+                                        <th>Cancha</th>
+                                        <th>Fecha</th>
+                                        <th>Horario</th>
+                                        <th>Duración</th>
+                                        <th>Estado</th>
+                                        <th>Valor Total</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-reservas-admin">
+                                    <tr>
+                                        <td class="fw-bold">RES-2026-001</td>
+                                        <td>
+                                            <div class="item-name">Juan Carlos Rodríguez</div>
+                                            <div class="item-desc">+57 310 555 1234</div>
+                                        </td>
+                                        <td><span class="badge-outline rounded-sm">Cancha 1</span></td>
+                                        <td>lun, 09 de mar</td>
+                                        <td>18:00 - 20:00</td>
+                                        <td>2h</td>
+                                        <td><span class="badge-status bg-green">Confirmada</span></td>
+                                        <td>$150.000</td>
+                                        <td>
+                                            <button class="btn-icon" title="Ver" onclick="alert('Detalles de reserva: RES-2026-001')"><i class='bx bx-show'></i></button>
+                                            <button class="btn-icon text-danger" title="Cancelar" onclick="if(confirm('¿Seguro que deseas cancelar esta reserva?')) { this.closest('tr').cells[6].innerHTML='<span class=\'badge-status\' style=\'background-color:#fee2e2; color:#dc3545; border:1px solid #fca5a5\'>Cancelada</span>'; this.style.display='none'; }"><i class='bx bx-x-circle'></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">RES-2026-002</td>
+                                        <td>
+                                            <div class="item-name">María Fernanda López</div>
+                                            <div class="item-desc">+57 315 555 5678</div>
+                                        </td>
+                                        <td><span class="badge-outline rounded-sm">Cancha 2</span></td>
+                                        <td>dom, 08 de mar</td>
+                                        <td>15:00 - 16:00</td>
+                                        <td>1h</td>
+                                        <td><span class="badge-status bg-gray">Completada</span></td>
+                                        <td>$80.000</td>
+                                        <td>
+                                            <button class="btn-icon" title="Ver" onclick="alert('Detalles de reserva: RES-2026-002')"><i class='bx bx-show'></i></button>
+                                            <button class="btn-icon text-danger" title="Cancelar" onclick="if(confirm('¿Seguro que deseas cancelar esta reserva?')) { this.closest('tr').cells[6].innerHTML='<span class=\'badge-status\' style=\'background-color:#fee2e2; color:#dc3545; border:1px solid #fca5a5\'>Cancelada</span>'; this.style.display='none'; }"><i class='bx bx-x-circle'></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">RES-2026-003</td>
+                                        <td>
+                                            <div class="item-name">Club Deportivo Los Tigres</div>
+                                            <div class="item-desc">+57 320 555 9012</div>
+                                        </td>
+                                        <td><span class="badge-outline rounded-sm">Cancha 1</span></td>
+                                        <td>mar, 10 de mar</td>
+                                        <td>20:00 - 22:00</td>
+                                        <td>2h</td>
+                                        <td><span class="badge-status bg-green">Confirmada</span></td>
+                                        <td>$150.000</td>
+                                        <td>
+                                            <button class="btn-icon" title="Ver" onclick="alert('Detalles de reserva: RES-2026-003')"><i class='bx bx-show'></i></button>
+                                            <button class="btn-icon text-danger" title="Cancelar" onclick="if(confirm('¿Seguro que deseas cancelar esta reserva?')) { this.closest('tr').cells[6].innerHTML='<span class=\'badge-status\' style=\'background-color:#fee2e2; color:#dc3545; border:1px solid #fca5a5\'>Cancelada</span>'; this.style.display='none'; }"><i class='bx bx-x-circle'></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">RES-2026-004</td>
+                                        <td>
+                                            <div class="item-name">Equipo Los Galácticos</div>
+                                            <div class="item-desc">+57 300 111 2222</div>
+                                        </td>
+                                        <td><span class="badge-outline rounded-sm">Cancha 2</span></td>
+                                        <td>mié, 11 de mar</td>
+                                        <td>19:00 - 20:00</td>
+                                        <td>1h</td>
+                                        <td><span class="badge-status bg-green">Confirmada</span></td>
+                                        <td>$80.000</td>
+                                        <td>
+                                            <button class="btn-icon" title="Ver" onclick="alert('Detalles de reserva: RES-2026-004')"><i class='bx bx-show'></i></button>
+                                            <button class="btn-icon text-danger" title="Cancelar" onclick="if(confirm('¿Seguro que deseas cancelar esta reserva?')) { this.closest('tr').cells[6].innerHTML='<span class=\'badge-status\' style=\'background-color:#fee2e2; color:#dc3545; border:1px solid #fca5a5\'>Cancelada</span>'; this.style.display='none'; }"><i class='bx bx-x-circle'></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">RES-2026-005</td>
+                                        <td>
+                                            <div class="item-name">Torneo Empresarial</div>
+                                            <div class="item-desc">+57 322 999 8888</div>
+                                        </td>
+                                        <td><span class="badge-outline rounded-sm">Cancha 1</span></td>
+                                        <td>jue, 12 de mar</td>
+                                        <td>18:00 - 22:00</td>
+                                        <td>4h</td>
+                                        <td><span class="badge-status bg-gray">Pendiente</span></td>
+                                        <td>$300.000</td>
+                                        <td>
+                                            <button class="btn-icon" title="Ver" onclick="alert('Detalles de reserva: RES-2026-005')"><i class='bx bx-show'></i></button>
+                                            <button class="btn-icon text-success" title="Confirmar" onclick="this.closest('tr').cells[6].innerHTML='<span class=\\'badge-status bg-green\\'>Confirmada</span>'; this.style.display='none'; alert('¡Reserva Confirmada Oficialmente!');"><i class='bx bx-check-circle'></i></button>
+                                            <button class="btn-icon text-danger" title="Cancelar" onclick="if(confirm('¿Seguro que deseas cancelar esta reserva?')) { this.closest('tr').cells[6].innerHTML='<span class=\\'badge-status\\' style=\\'background-color:#fee2e2; color:#dc3545; border:1px solid #fca5a5\\'>Cancelada</span>'; const confBtn = this.parentElement.querySelector('.text-success'); if(confBtn) confBtn.style.display='none'; this.style.display='none'; }"><i class='bx bx-x-circle'></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </section> <!-- Fin Reservas -->
+
+                <!-- Vista: Reportes -->
+                <section id="view-reportes" class="view">
+                    
+                    <div class="grid-4kpi mb-4">
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span>Inversión Total</span>
+                                <i class='bx bx-trending-up text-success'></i>
+                            </div>
+                            <h2 class="kpi-value">$185.0M</h2>
+                            <p class="kpi-desc">En activos registrados</p>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span>Activos Totales</span>
+                                <i class='bx bx-cube text-primary'></i>
+                            </div>
+                            <h2 class="kpi-value">10</h2>
+                            <p class="kpi-desc">Distribuidos en 4 categorías</p>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span>Tickets del Mes</span>
+                                <i class='bx bx-receipt text-purple'></i>
+                            </div>
+                            <h2 class="kpi-value">8</h2>
+                            <p class="kpi-desc">Marzo 2026</p>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span>Tasa de Resolución</span>
+                                <i class='bx bx-file text-success'></i>
+                            </div>
+                            <h2 class="kpi-value">80%</h2>
+                            <p class="kpi-desc">Tickets resueltos a tiempo</p>
+                        </div>
+                    </div>
+
+                    <div class="grid-2charts mt-4">
+                        <div class="chart-card">
+                            <div class="chart-container" style="height: 300px;">
+                                <canvas id="chart-resumen-meses"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-container" style="height: 300px;">
+                                <canvas id="chart-categorias-activos"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section> <!-- Fin Reportes -->
+
+            </div> <!-- Fin Views -->
+
+        </main>
+
+        <!-- MODAL DE RESERVA -->
+        <div class="modal-overlay" id="modal-reserva">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <h3 class="modal-title">Nueva Reserva (Admin)</h3>
+                    <button class="modal-close" id="close-modal">&times;</button>
+                </div>
+                <form id="form-reserva">
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Seleccionar Cancha / Deporte</label>
+                        <select id="select-cancha" style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit; font-size:1rem;">
+                            <option value="60000">Cancha 1 (Fútbol 5)</option>
+                            <option value="80000">Cancha 2 (Fútbol 7)</option>
+                            <option value="75000">Cancha 3 Cubierta (Fútbol 5)</option>
+                            <option value="120000">Cancha 4 VIP (Fútbol 5)</option>
+                            <option value="150000">Cancha 5 (Fútbol 11)</option>
+                            <option value="45000">Cancha de Tenis (Polvo de Ladrillo)</option>
+                            <option value="40000">Cancha de Tenis (Sintética)</option>
+                            <option value="35000">Cancha de Baloncesto</option>
+                            <option value="30000">Cancha de Voleibol</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Nombre del Cliente/Equipo</label>
+                        <input id="input-cliente" type="text" placeholder="Ej. Equipo Los Tigres" style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit;">
+                    </div>
+                    <div style="margin-bottom: 1rem; display:flex; gap:1rem;">
+                        <div style="flex:1;">
+                            <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Fecha</label>
+                            <input id="input-fecha" type="date" style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit;">
+                        </div>
+                        <div style="flex:1;">
+                            <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Horario</label>
+                            <select id="select-horario" style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit;">
+                                <option>18:00 - 19:00</option>
+                                <option>19:00 - 20:00</option>
+                                <option>20:00 - 21:00</option>
+                                <option>21:00 - 22:00</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-size: 1.1rem; font-weight: 600;">Precio Estimado:</span>
+                            <span id="precio-reserva" style="font-size: 1.25rem; font-weight: 700; color: var(--success);">$60.000 COP</span>
+                        </div>
+                        <div style="background-color: #fff3ce; border-left: 4px solid #ffc107; padding: 0.75rem; border-radius: 4px; margin-top: 1rem;">
+                            <p style="margin: 0; font-size: 0.85rem; color: #856404; display: flex; align-items: flex-start; gap: 0.5rem;">
+                                <i class='bx bx-error-triangle' style="font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem;"></i>
+                                <span><strong>Aviso de Responsabilidad:</strong> Tú eres responsable de los objetos u materiales que se prestan, cuida el estado general de la cancha que te asignaron.</span>
+                            </p>
+                        </div>
+                    </div>
+                    <button id="btn-submit-reserva" type="button" class="btn btn-primary" style="width:100%; padding:0.8rem; margin-top:1rem;">
+                        Asignar Reserva
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/charts.js"></script>
+</body>
+</html>

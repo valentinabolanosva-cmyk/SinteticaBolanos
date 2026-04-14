@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SintéticaBolaños - Iniciar Sesión</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body class="auth-body">
+
+    <div class="auth-container">
+        <div class="auth-header">
+            <i class='bx bxs-pie-chart-alt-2 auth-icon'></i>
+            <h1 class="auth-title">SintéticaBolaños</h1>
+            <p class="auth-subtitle">Inicia sesión en tu cuenta para continuar</p>
+        </div>
+
+        <div id="login-error" class="error-message">
+            Credenciales incorrectas. Intenta de nuevo.
+        </div>
+
+        <form id="login-form" class="auth-form">
+            <div class="form-group">
+                <label for="email">Correo Electrónico</label>
+                <input type="email" id="email" class="form-control" placeholder="ejemplo@correo.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password" class="flex-between">
+                    <span>Contraseña</span>
+                    <a href="#" class="auth-link" style="font-size: 0.8rem; font-weight: 500;">¿Olvidaste tu contraseña?</a>
+                </label>
+                <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn auth-btn">
+                Iniciar Sesión <i class='bx bx-right-arrow-alt'></i>
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            ¿No tienes una cuenta? <a href="register.html" class="auth-link">Regístrate aquí</a>
+        </div>
+    </div>
+
+    <!-- Auth JS -->
+    <script src="js/auth.js"></script>
+</body>
+</html>
