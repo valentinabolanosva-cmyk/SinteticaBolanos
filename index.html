@@ -69,11 +69,31 @@
                     <p id="page-subtitle">Vista general del sistema de gestión</p>
                 </div>
                 
-                <div class="topbar-right">
+                <div class="topbar-right" style="display: flex; align-items: center; gap: 1rem; position: relative;">
                     <div class="date-widget" id="header-date-widget">
                         <i class='bx bx-calendar'></i>
                         <span id="current-date">Lunes, 9 de Marzo 2026</span>
                     </div>
+                    
+                    <!-- NOTIFICACIONES -->
+                    <div class="notifications-wrapper" style="position: relative; z-index: 9999;">
+                        <button class="btn-icon" id="btn-notifications" style="position: relative; font-size: 1.5rem; background: transparent; border: none; cursor: pointer; color: var(--text-dark);">
+                            <i class='bx bx-bell'></i>
+                            <span id="notif-badge" class="badge-tab" style="position: absolute; top: -5px; right: -5px; background: var(--danger); color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.7rem; display: none;">0</span>
+                        </button>
+                        
+                        <!-- Dropdown Notificaciones -->
+                        <div id="notif-dropdown" style="display: none; position: absolute; top: 120%; right: 0; background: white; border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 320px; overflow: hidden;">
+                            <div style="padding: 1rem; border-bottom: 1px solid var(--border-color); background: #f8fafc; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
+                                <span>Notificaciones</span>
+                                <span class="badge badge-outline" style="font-size: 0.7rem;" id="notif-count-text">0 Nuevas</span>
+                            </div>
+                            <div id="notif-list" style="max-height: 300px; overflow-y: auto;">
+                                <!-- Notificaciones irán aquí -->
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="header-actions" id="header-actions-container">
                         <button class="btn btn-primary" style="display: none;" id="btn-share">
                             <i class='bx bx-share-alt'></i> Compartir
@@ -332,39 +352,46 @@
                 <!-- Vista: Reservas -->
                 <section id="view-reservas" class="view">
                     
-                    <div class="tabs-container">
-                        <button class="tab-btn active"><i class='bx bx-calendar-event'></i> Reservas</button>
-                        <button class="tab-btn"><i class='bx bx-time-five'></i> Tickets de Mantenimiento <span class="badge-tab">5</span></button>
+                    <div class="tabs-container" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <button class="tab-btn active"><i class='bx bx-calendar-event'></i> Reservas</button>
+                            <button class="tab-btn"><i class='bx bx-time-five'></i> Tickets de Mantenimiento <span class="badge-tab" id="badge-admin-tickets">0</span></button>
+                        </div>
+                        <button id="btn-open-mantenimiento" class="btn" style="background-color: #f59e0b; color: white; border: none; font-weight: 600;">
+                            <i class='bx bx-wrench'></i> Poner en Mantenimiento
+                        </button>
                     </div>
 
+                    <div id="admin-maintenance-alerts" class="mb-4 mt-3"></div>
+
                     <div class="grid-4kpi mb-4">
-                        <div class="kpi-card border-left-blue">
+                        <div class="kpi-card border-left-blue" id="kpi-reservas-hoy" style="cursor: pointer;" title="Filtrar reservas de hoy">
                             <div class="kpi-header">
                                 <span>Reservas Hoy</span>
                                 <i class='bx bx-calendar text-primary'></i>
                             </div>
-                            <h2 class="kpi-value text-primary">2</h2>
+                            <h2 class="kpi-value text-primary" id="count-hoy">0</h2>
                         </div>
-                        <div class="kpi-card border-left-green">
+                        <div class="kpi-card border-left-green" id="kpi-reservas-confirmadas" style="cursor: pointer;" title="Filtrar confirmadas">
                             <div class="kpi-header">
                                 <span>Confirmadas</span>
                                 <i class='bx bx-time-five text-success'></i>
                             </div>
-                            <h2 class="kpi-value text-success">6</h2>
+                            <h2 class="kpi-value text-success" id="count-confirmadas">0</h2>
                         </div>
-                        <div class="kpi-card border-left-orange">
+                        <div class="kpi-card border-left-orange" id="kpi-reservas-pendientes" style="cursor: pointer;" title="Filtrar pendientes">
                             <div class="kpi-header">
                                 <span>Pendientes</span>
                                 <i class='bx bx-group text-warning'></i>
                             </div>
-                            <h2 class="kpi-value text-warning">1</h2>
+                            <h2 class="kpi-value text-warning" id="count-pendientes">0</h2>
                         </div>
-                        <div class="kpi-card border-left-green-light">
+                        <div class="kpi-card border-left-green-light" id="kpi-reservas-todas" style="cursor: pointer;" title="Ver todas las reservas">
                             <div class="kpi-header">
-                                <span>Ingresos Marzo</span>
-                                <i class='bx bx-dollar text-success'></i>
+                                <span>Ver Todas</span>
+                                <i class='bx bx-list-ul text-success'></i>
                             </div>
-                            <h2 class="kpi-value text-success">$1020K</h2>
+                            <h2 class="kpi-value text-success" id="count-todas">0</h2>
                         </div>
                     </div>
 
@@ -491,8 +518,8 @@
                                         <td><span class="badge-status bg-green">Confirmada</span></td>
                                         <td>$150.000</td>
                                         <td>
-                                            <button class="btn-icon" title="Ver" onclick="alert('Detalles de reserva: RES-2026-001')"><i class='bx bx-show'></i></button>
-                                            <button class="btn-icon text-danger" title="Cancelar" onclick="if(confirm('¿Seguro que deseas cancelar esta reserva?')) { this.closest('tr').cells[6].innerHTML='<span class=\'badge-status\' style=\'background-color:#fee2e2; color:#dc3545; border:1px solid #fca5a5\'>Cancelada</span>'; this.style.display='none'; }"><i class='bx bx-x-circle'></i></button>
+                                            <button class="btn-icon" title="Ver" onclick="verReserva('RES-2026-001')"><i class='bx bx-show'></i></button>
+                                            <button class="btn-icon text-danger" title="Cancelar" onclick="cancelarReserva(this)"><i class='bx bx-x-circle'></i></button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -508,8 +535,8 @@
                                         <td><span class="badge-status bg-gray">Completada</span></td>
                                         <td>$80.000</td>
                                         <td>
-                                            <button class="btn-icon" title="Ver" onclick="alert('Detalles de reserva: RES-2026-002')"><i class='bx bx-show'></i></button>
-                                            <button class="btn-icon text-danger" title="Cancelar" onclick="if(confirm('¿Seguro que deseas cancelar esta reserva?')) { this.closest('tr').cells[6].innerHTML='<span class=\'badge-status\' style=\'background-color:#fee2e2; color:#dc3545; border:1px solid #fca5a5\'>Cancelada</span>'; this.style.display='none'; }"><i class='bx bx-x-circle'></i></button>
+                                            <button class="btn-icon" title="Ver" onclick="verReserva('RES-2026-002')"><i class='bx bx-show'></i></button>
+                                            <button class="btn-icon text-danger" title="Cancelar" onclick="cancelarReserva(this)"><i class='bx bx-x-circle'></i></button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -525,8 +552,8 @@
                                         <td><span class="badge-status bg-green">Confirmada</span></td>
                                         <td>$150.000</td>
                                         <td>
-                                            <button class="btn-icon" title="Ver" onclick="alert('Detalles de reserva: RES-2026-003')"><i class='bx bx-show'></i></button>
-                                            <button class="btn-icon text-danger" title="Cancelar" onclick="if(confirm('¿Seguro que deseas cancelar esta reserva?')) { this.closest('tr').cells[6].innerHTML='<span class=\'badge-status\' style=\'background-color:#fee2e2; color:#dc3545; border:1px solid #fca5a5\'>Cancelada</span>'; this.style.display='none'; }"><i class='bx bx-x-circle'></i></button>
+                                            <button class="btn-icon" title="Ver" onclick="verReserva('RES-2026-003')"><i class='bx bx-show'></i></button>
+                                            <button class="btn-icon text-danger" title="Cancelar" onclick="cancelarReserva(this)"><i class='bx bx-x-circle'></i></button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -542,8 +569,8 @@
                                         <td><span class="badge-status bg-green">Confirmada</span></td>
                                         <td>$80.000</td>
                                         <td>
-                                            <button class="btn-icon" title="Ver" onclick="alert('Detalles de reserva: RES-2026-004')"><i class='bx bx-show'></i></button>
-                                            <button class="btn-icon text-danger" title="Cancelar" onclick="if(confirm('¿Seguro que deseas cancelar esta reserva?')) { this.closest('tr').cells[6].innerHTML='<span class=\'badge-status\' style=\'background-color:#fee2e2; color:#dc3545; border:1px solid #fca5a5\'>Cancelada</span>'; this.style.display='none'; }"><i class='bx bx-x-circle'></i></button>
+                                            <button class="btn-icon" title="Ver" onclick="verReserva('RES-2026-004')"><i class='bx bx-show'></i></button>
+                                            <button class="btn-icon text-danger" title="Cancelar" onclick="cancelarReserva(this)"><i class='bx bx-x-circle'></i></button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -559,9 +586,9 @@
                                         <td><span class="badge-status bg-gray">Pendiente</span></td>
                                         <td>$300.000</td>
                                         <td>
-                                            <button class="btn-icon" title="Ver" onclick="alert('Detalles de reserva: RES-2026-005')"><i class='bx bx-show'></i></button>
-                                            <button class="btn-icon text-success" title="Confirmar" onclick="this.closest('tr').cells[6].innerHTML='<span class=\\'badge-status bg-green\\'>Confirmada</span>'; this.style.display='none'; alert('¡Reserva Confirmada Oficialmente!');"><i class='bx bx-check-circle'></i></button>
-                                            <button class="btn-icon text-danger" title="Cancelar" onclick="if(confirm('¿Seguro que deseas cancelar esta reserva?')) { this.closest('tr').cells[6].innerHTML='<span class=\\'badge-status\\' style=\\'background-color:#fee2e2; color:#dc3545; border:1px solid #fca5a5\\'>Cancelada</span>'; const confBtn = this.parentElement.querySelector('.text-success'); if(confBtn) confBtn.style.display='none'; this.style.display='none'; }"><i class='bx bx-x-circle'></i></button>
+                                            <button class="btn-icon" title="Ver" onclick="verReserva('RES-2026-005')"><i class='bx bx-show'></i></button>
+                                            <button class="btn-icon text-success" title="Confirmar" onclick="confirmarReserva(this)"><i class='bx bx-check-circle'></i></button>
+                                            <button class="btn-icon text-danger" title="Cancelar" onclick="cancelarReserva(this)"><i class='bx bx-x-circle'></i></button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -575,7 +602,7 @@
                 <section id="view-reportes" class="view">
                     
                     <div class="grid-4kpi mb-4">
-                        <div class="kpi-card">
+                        <div class="kpi-card" style="cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'" onclick="alert('Detalle de Inversión:\\n\\n- Infraestructura: $135.0M\\n- Equipamiento: $15.0M\\n- Iluminación: $35.0M\\n\\nTotal Registrado: $185.0M COP')">
                             <div class="kpi-header">
                                 <span>Inversión Total</span>
                                 <i class='bx bx-trending-up text-success'></i>
@@ -583,7 +610,7 @@
                             <h2 class="kpi-value">$185.0M</h2>
                             <p class="kpi-desc">En activos registrados</p>
                         </div>
-                        <div class="kpi-card">
+                        <div class="kpi-card" style="cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'" onclick="alert('Detalle de Activos Totales (10):\\n\\n- 4 Activos de Infraestructura (Canchas, mallas)\\n- 3 Activos de Equipamiento (Balones, porterías)\\n- 3 Activos de Iluminación (Reflectores, torres)\\n\\n(3 en estado Excelente, 4 Buenos, 3 Regulares)')">
                             <div class="kpi-header">
                                 <span>Activos Totales</span>
                                 <i class='bx bx-cube text-primary'></i>
@@ -591,7 +618,7 @@
                             <h2 class="kpi-value">10</h2>
                             <p class="kpi-desc">Distribuidos en 4 categorías</p>
                         </div>
-                        <div class="kpi-card">
+                        <div class="kpi-card" style="cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'" onclick="alert('Tickets de Marzo 2026 (8):\\n\\n- 3 Tickets de prioridad Alta\\n- 2 Tickets de prioridad Media\\n- 2 Tickets Críticos\\n- 1 Sugerencia\\n\\nDe los cuales 5 están Resueltos.')">
                             <div class="kpi-header">
                                 <span>Tickets del Mes</span>
                                 <i class='bx bx-receipt text-purple'></i>
@@ -599,7 +626,7 @@
                             <h2 class="kpi-value">8</h2>
                             <p class="kpi-desc">Marzo 2026</p>
                         </div>
-                        <div class="kpi-card">
+                        <div class="kpi-card" style="cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'" onclick="alert('Tasa de Resolución (80%):\\n\\nEste KPI se calcula dividiendo los tickets marcados como Resueltos entre el total de tickets del sistema.\\n\\n¡El equipo de mantenimiento está siendo muy rápido en responder!')">
                             <div class="kpi-header">
                                 <span>Tasa de Resolución</span>
                                 <i class='bx bx-file text-success'></i>
@@ -668,6 +695,10 @@
                             </select>
                         </div>
                     </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Comentario (Opcional)</label>
+                        <textarea id="input-comentario" rows="2" placeholder="Ej. Llevaremos nuestros propios petos..." style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit; resize:vertical;"></textarea>
+                    </div>
                     <div style="margin-bottom: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                             <span style="font-size: 1.1rem; font-weight: 600;">Precio Estimado:</span>
@@ -686,10 +717,147 @@
                 </form>
             </div>
         </div>
+
+        <!-- MODAL DE NUEVO ACTIVO -->
+        <div class="modal-overlay" id="modal-activo">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <h3 class="modal-title">Registrar Nuevo Activo</h3>
+                    <button class="modal-close" id="close-modal-activo">&times;</button>
+                </div>
+                <form id="form-activo">
+                    <div style="margin-bottom:1rem; display:flex; gap:1rem;">
+                        <div style="flex:1;">
+                            <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Código</label>
+                            <input id="input-codigo-activo" type="text" placeholder="Ej. CSP-003" style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit;">
+                        </div>
+                        <div style="flex:2;">
+                            <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Nombre del Activo</label>
+                            <input id="input-nombre-activo" type="text" placeholder="Ej. Sistema de Riego Automático" style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit;">
+                        </div>
+                    </div>
+                    <div style="margin-bottom:1rem;">
+                        <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Descripción</label>
+                        <input id="input-desc-activo" type="text" placeholder="Breve descripción del activo..." style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit;">
+                    </div>
+                    <div style="margin-bottom:1rem; display:flex; gap:1rem;">
+                        <div style="flex:1;">
+                            <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Categoría</label>
+                            <select id="select-categoria-activo" style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit;">
+                                <option>Infraestructura</option>
+                                <option>Equipamiento</option>
+                                <option>Iluminación</option>
+                            </select>
+                        </div>
+                        <div style="flex:1;">
+                            <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Estado</label>
+                            <select id="select-estado-activo" style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit;">
+                                <option>Excelente</option>
+                                <option selected>Bueno</option>
+                                <option>Regular</option>
+                                <option>Malo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:1rem; display:flex; gap:1rem;">
+                        <div style="flex:1;">
+                            <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Cancha Asignada</label>
+                            <select id="select-cancha-activo" style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit;">
+                                <option>Cancha 1</option>
+                                <option>Cancha 2</option>
+                                <option>Cancha 3</option>
+                                <option>Múltiple</option>
+                            </select>
+                        </div>
+                        <div style="flex:1;">
+                            <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Valor Estimado ($)</label>
+                            <input id="input-valor-activo" type="number" placeholder="Ej. 5000000" style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit;">
+                        </div>
+                    </div>
+                    <button id="btn-submit-activo" type="button" class="btn btn-primary" style="width:100%; padding:0.8rem; margin-top:0.5rem;">
+                        <i class='bx bx-plus-circle'></i> Registrar Activo
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- MODAL VER DETALLES DE RESERVA -->
+        <div class="modal-overlay" id="modal-ver-reserva">
+            <div class="modal-box" style="max-width: 450px;">
+                <div class="modal-header">
+                    <h3 class="modal-title">Detalles de Reserva</h3>
+                    <button class="modal-close" id="close-modal-ver">&times;</button>
+                </div>
+                <div style="padding: 1rem 0;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                        <span style="font-weight: 500; color: var(--text-muted);">Código:</span>
+                        <strong id="ver-res-codigo" style="color: var(--primary);">RES-XXXX</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <span style="font-weight: 500; color: var(--text-muted);">Cliente:</span>
+                        <strong id="ver-res-cliente">...</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <span style="font-weight: 500; color: var(--text-muted);">Cancha:</span>
+                        <strong id="ver-res-cancha">...</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <span style="font-weight: 500; color: var(--text-muted);">Fecha:</span>
+                        <strong id="ver-res-fecha">...</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <span style="font-weight: 500; color: var(--text-muted);">Horario:</span>
+                        <strong id="ver-res-horario">...</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <span style="font-weight: 500; color: var(--text-muted);">Estado:</span>
+                        <span id="ver-res-estado" class="badge-status bg-gray">...</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <span style="font-weight: 500; color: var(--text-muted);">Valor:</span>
+                        <strong id="ver-res-precio" style="color: var(--success); font-size: 1.1rem;">...</strong>
+                    </div>
+                    <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-sm); margin-top: 1rem; border: 1px dashed var(--border-color);">
+                        <span style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.5rem;">Comentario del Cliente:</span>
+                        <p id="ver-res-comentario" style="margin: 0; font-size: 0.9rem; font-style: italic; color: #555;">Sin comentarios.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL DE MANTENIMIENTO (ADMIN) -->
+        <div class="modal-overlay" id="modal-mantenimiento">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <h3 class="modal-title">Poner Cancha en Mantenimiento</h3>
+                    <button class="modal-close" id="close-modal-mantenimiento">&times;</button>
+                </div>
+                <form id="form-mantenimiento" style="margin-top: 1rem;">
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Cancha Afectada</label>
+                        <select id="select-cancha-mant" style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit;">
+                            <option value="Cancha 1 (Fútbol 5)">Cancha 1 (Fútbol 5)</option>
+                            <option value="Cancha 2 (Fútbol 7)">Cancha 2 (Fútbol 7)</option>
+                            <option value="Cancha 3 (Fútbol 7)">Cancha 3 (Fútbol 7)</option>
+                            <option value="Cancha 4 (Fútbol 9)">Cancha 4 (Fútbol 9)</option>
+                            <option value="Cancha 5 (Fútbol 11)">Cancha 5 (Fútbol 11)</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Motivo del Mantenimiento</label>
+                        <textarea id="input-motivo-mant" rows="3" placeholder="Ej. Cambio de malla, luces dañadas..." style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit; resize:vertical;"></textarea>
+                    </div>
+                    <button id="btn-submit-mantenimiento" type="button" class="btn" style="width:100%; padding:0.8rem; margin-top:0.5rem; background-color:#f59e0b; color:white; border:none; font-weight:600; cursor:pointer;">
+                        <i class='bx bx-wrench'></i> Declarar Mantenimiento
+                    </button>
+                </form>
+            </div>
+        </div>
+
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/chart.min.js"></script>
     <script src="js/app.js"></script>
     <script src="js/charts.js"></script>
 </body>

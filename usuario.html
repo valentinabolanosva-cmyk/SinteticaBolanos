@@ -75,6 +75,25 @@
                         <i class='bx bx-calendar'></i>
                         <span id="current-date">Lunes, 9 de Marzo 2026</span>
                     </div>
+
+                    <!-- Notificaciones Usuario -->
+                    <div class="notification-wrapper" style="position: relative; margin-right: 15px; z-index: 9999;">
+                        <button class="btn-icon" id="btn-notifications-user" style="position: relative;">
+                            <i class='bx bx-bell'></i>
+                            <span class="notification-badge" id="notif-badge-user" style="display: none; position: absolute; top: -5px; right: -5px; background: var(--danger); color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.7rem; font-weight: bold;">0</span>
+                        </button>
+                        
+                        <div class="notification-dropdown shadow-sm" id="notif-dropdown-user" style="display: none; position: absolute; right: 0; top: 120%; background: white; border-radius: var(--radius-md); width: 300px; border: 1px solid var(--border-color);">
+                            <div style="padding: 1rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                                <h4 style="margin: 0; font-size: 1rem;">Notificaciones</h4>
+                                <span class="badge bg-primary text-white" id="notif-count-text-user">0 Nuevas</span>
+                            </div>
+                            <div class="notif-list" id="notif-list-user" style="max-height: 300px; overflow-y: auto;">
+                                <!-- Se llenará con JS -->
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="header-actions" id="header-actions-container">
                         <button class="btn btn-primary" id="btn-action" style="display: none;">
                             <i class='bx bx-calendar-plus'></i> Nueva Acción
@@ -90,32 +109,25 @@
                 <section id="view-inicio" class="view active">
                     
                     <h2 class="mb-4 text-dark">Hola, <span id="greeting-name">Jugador</span> 👋</h2>
+                    
+                    <div id="maintenance-alerts-container" class="mb-4"></div>
 
                     <div class="grid-2charts">
                         <!-- Próxima Reserva -->
                         <div class="card">
                             <h3 class="card-title mb-4"><i class='bx bx-time text-primary mr-2'></i> Tu Próxima Reserva</h3>
-                            
-                            <div style="background-color: #f0fdf4; border: 1px solid #10b981; border-radius: var(--radius-md); padding: 1.5rem;">
-                                <div class="flex-between mb-2">
-                                    <span class="badge badge-status bg-green">Confirmada</span>
-                                    <span style="font-weight: 600; color: #065f46;">Mañana, 18:00h</span>
+                            <div id="next-reserva-container">
+                                <div style="background-color: #f8fafc; border: 1px dashed var(--border-color); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; color: var(--text-muted);">
+                                    No tienes reservas próximas confirmadas.
                                 </div>
-                                <h4 style="font-size: 1.2rem; color: #064e3b; margin-bottom: 0.5rem;">Fútbol 5 - Cancha Central</h4>
-                                <p style="color: #047857; font-size: 0.9rem;"><i class='bx bx-map'></i> Sede Principal Norte</p>
                             </div>
                         </div>
 
-                        <!-- Estado de Soporte -->
+                        <!-- Estado de Soporte y Notificaciones -->
                         <div class="card">
-                            <h3 class="card-title mb-4"><i class='bx bx-receipt text-warning mr-2'></i> Notificaciones</h3>
-                            <div class="ticket-item" style="border: 1px solid var(--border-color); padding: 1rem; border-radius: var(--radius-md);">
-                                <div class="flex-between mb-2">
-                                    <span class="badge badge-secondary">TKT-1020</span>
-                                    <span class="badge badge-outline">Resuelto</span>
-                                </div>
-                                <p class="text-dark" style="font-weight: 500;">Problema con malla reportado</p>
-                                <p class="text-muted" style="font-size: 0.8rem; margin-top: 0.5rem;">Tu reporte ha sido solucionado. ¡Gracias por avisarnos!</p>
+                            <h3 class="card-title mb-4"><i class='bx bx-receipt text-warning mr-2'></i> Actividad Reciente</h3>
+                            <div id="recent-activity-container">
+                                <!-- Se llenará con JS (tickets y estado) -->
                             </div>
                         </div>
                     </div>
@@ -151,7 +163,6 @@
                                         <td>11:00 - 12:00</td>
                                         <td><span class="badge-status bg-gray">Completada</span></td>
                                     </tr>
-                                    <tr>
                                     <tr>
                                         <td>Sáb, 28 feb</td>
                                         <td><span class="fw-bold">Cancha Central</span></td>
@@ -248,6 +259,10 @@
                                 <option>21:00 - 22:00</option>
                             </select>
                         </div>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; font-weight:500;">Comentario (Opcional)</label>
+                        <textarea id="input-comentario" rows="2" placeholder="Ej. Llevaremos nuestros propios petos..." style="width:100%; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-md); font-family:inherit; resize:vertical;"></textarea>
                     </div>
                     <div style="margin-bottom: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">

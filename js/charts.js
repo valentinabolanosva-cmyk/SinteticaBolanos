@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         new Chart(ctxTicketsEstado, {
             type: 'bar',
             data: {
-                labels: ['En Progreso', 'En Progreso', 'Resuelto', 'Cerrado'], // Based on mockup visual glitch having double En Progreso or similar, let's just make it look like the image.
+                labels: ['Abierto', 'En Progreso', 'Resuelto', 'Cerrado'],
                 datasets: [{
                     label: 'Tickets',
                     data: [3, 2, 1, 1], // Values approaching mockup heights
@@ -99,16 +99,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 labels: ['Sep 2025', 'Oct 2025', 'Nov 2025', 'Dic 2025', 'Ene 2026', 'Feb 2026', 'Mar 2026'],
                 datasets: [{
                     label: 'Tickets',
-                    data: [4, 5, 6, 3, 3, 5, 4, 3], // approximate from yellow chart
+                    data: [4, 5, 6, 3, 3, 5, 4],
                     backgroundColor: colorYellow,
-                    borderRadius: 0 
+                    borderRadius: 4
                 }]
             },
             options: {
                 ...commonOptions,
                 scales: {
                     ...commonOptions.scales,
-                    y: { max: 15, ticks: { stepSize: 4 }}
+                    y: { beginAtZero: true, max: 15, ticks: { stepSize: 4 }}
                 }
             }
         });
