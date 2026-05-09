@@ -127,5 +127,5 @@ app.get('/api/reservas', async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(\`Servidor GestiCanchas API corriendo en http://localhost:\${port}\`);
+    console.log(`Servidor GestiCanchas API corriendo en http://localhost:${port}`);
 });
